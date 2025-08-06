@@ -5,7 +5,7 @@ import structlog
 import sys
 
 from dotenv import load_dotenv
-from flightboard import Radar, plane
+from flightboard import Radar, flightstrip 
 from structlog import get_logger
 
 structlog.configure(
@@ -19,14 +19,13 @@ log = get_logger()
 load_dotenv()
 
 
+DUMP_1090_URL = os.getenv("DUMP1090_URL")
 def run():
     log.info("Running")
-    radar = Radar("http://fa.weepytests.com/skyaware/data/aircraft.json")
-    results = radar._get_radar_dump()
-    for plane in results:
-        log.info("", callsign=plane["flight"], altitude=plane["alt_baro"], speed=plane["gs"])
-        
-    # log.info(results)
+    radar = Radar(DUMP_1090_URL)
+    flightstrips = radar.sweep()
+    for flightstrip in flightstrips:
+        log.info("", strip=flightstrip)
 
 
 if __name__ == "__main__":
