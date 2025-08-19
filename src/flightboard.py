@@ -18,6 +18,10 @@ class flightstrip:
     heading: str = None
     airline: str = None
     type: str = None
+    squawk: str = None
+    route: str = None
+    vs_rate: str = None
+    emergency: bool = None
 
 
 class Radar():
@@ -49,6 +53,12 @@ class Radar():
         else:
             new_flightstrip.speed = str(plane["ias"])
         new_flightstrip.heading = str(plane["track"])
+        if "baro_rate" in plane:
+            new_flightstrip.vs_rate = str(plane["baro_rate"])
+        if "emergency" in plane and plane["emergency"] != "none":
+            new_flightstrip.emergency = True
+        if "squawk" in plane:
+            new_flightstrip.squawk = plane["squawk"]
         return new_flightstrip
 
     def _get_flight_route(self, callsign):
@@ -69,15 +79,16 @@ class Radar():
         contacts = self._get_radar_dump()
         radar_sweep = []
         for plane in contacts:
-            flightstrip = self._process_flightstrip(plane)
-            route_details = self._get_flight_route(flightstrip.callsign)
-            if route_details:
-                flightstrip.origin = route_details["response"]["flightroute"]["origin"]["icao_code"]
-                flightstrip.destination = route_details["response"]["flightroute"]["destination"]["icao_code"]
-            aircraft_details = self._get_aircraft_details(flightstrip.registration)
-            if aircraft_details:
-                flightstrip.type = aircraft_details["response"]["aircraft"]["type"]
-                flightstrip.airline = aircraft_details["response"]["aircraft"]["registered_owner"]
-            radar_sweep.append(flightstrip)
+            if "flight" in plane:
+                flightstrip = self._process_flightstrip(plane)
+                route_details = self._get_flight_route(flightstrip.callsign)
+                if route_details:
+                    flightstrip.origin = route_details["response"]["flightroute"]["origin"]["icao_code"]
+                    flightstrip.destination = route_details["response"]["flightroute"]["destination"]["icao_code"]
+                aircraft_details = self._get_aircraft_details(flightstrip.registration)
+                if aircraft_details:
+                    flightstrip.type = aircraft_details["response"]["aircraft"]["type"]
+                    flightstrip.airline = aircraft_details["response"]["aircraft"]["registered_owner"]
+                radar_sweep.append(flightstrip)
         return radar_sweep
 
