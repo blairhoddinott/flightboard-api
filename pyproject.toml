@@ -1,7 +1,7 @@
 [project]
 name = "flightboard-api"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.0.0"
+description = "API for connecting to dump1090 and providing an augmented dataset to current aircraft"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

@@ -1,0 +1,7 @@
+services:
+  flightboard-api:
+    image: weepyadmin/flightboard-api:latest
+    container_name: flightboard-api
+    ports:
+      - "8000:8000"
+    restart: unless-stopped

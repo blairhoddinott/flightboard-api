@@ -10,10 +10,23 @@ To get this running, you will need to change the .env.template to .env and updat
 
 Once this has been updated, you should be able to run the sample main.py to pull the data. `uv run src/main.py`
 
+## Dockerfile
+
+There is a `Dockerfile` supplied which can be used to build this. There is a `docker-compose.yaml` which can be used to run it. I will eventually be making this a public Docker image which you will need to override the environment variables. Just not there quite yet. You will need to populate your .env file **before** you Docker build it.
+
+Docker Build command:
+```bash
+docker build -t weepyadmin/flightboard-api:latest .
+```
+
 ### API
 
-I will be working on making a FastAPI endpoint that uses this library so that this data can be pulled programtically. The goal will be to make a Frontend for it to display flight strips kind of like an ATC station. Would be cool if I knew anything about Frontend Development :)
+The API is running in the api.py file. This will reach out to [ADSBDB](https://www.adsbdb.com/) and augment the flight information from Dump1090. This helps to provide a more complete picture of the aircraft around your station, with Origin/Destination information.
 
 ## Frontend Development
 
-I will have another repository (flightboard-frontend) that will have my ham-fisted approach to frontending this thing. If you wish to contribute, please get in touch with me, or open an issue and we can collaborate or maybe even just PR your code right in. Would be nice to have a pretty FE for this. I'd like to have this running on a display in my house. 
+The UI for this is located [here](https://github.com/blairhoddinott/flightboard-ui). I am not a proper frontend developer, and this is not the prettiest thing. It can connect to this API and provide data in a flightstrip, like what may be seen within a TRACON. The idea is cool, even if the execution isn't amazing. PRs, feedback and/or help with the UI is very much appreciated.
+
+## Future plans
+
+I would like to flesh out the details more. The next major feature I'd like to build is the ability to scrape the route from a **very** popular flight tracking website ;)

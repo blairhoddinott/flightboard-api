@@ -3,6 +3,7 @@ import json
 import os
 import structlog
 import sys
+import uvicorn
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -33,3 +34,6 @@ def sweep():
         log.info("", strip=flightstrip)
     return flightstrips
 
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
